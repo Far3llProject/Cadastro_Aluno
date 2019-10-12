@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Cadastro_Aluno</string>
+
+    //CRIAR UM ARRAY DE STRINGS PARA O SPINNER
+    <string-array name="cursos">
+        <item>ADS</item>
+        <item>GTI</item>
+    </string-array>
+
 </resources>
