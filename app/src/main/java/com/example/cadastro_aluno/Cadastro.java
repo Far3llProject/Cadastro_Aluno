@@ -3,6 +3,7 @@ package com.example.cadastro_aluno;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,21 +13,25 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.Serializable;
+
 public class Cadastro extends AppCompatActivity {
 
-    EditText alunoRA;
+    Aluno a;
+
+    EditText RA;
     EditText Nome;
-    Spinner Cursos;
+    Spinner  Cursos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
 //--------------------------------------------------------
-        alunoRA = findViewById(R.id.edtRA);
+        RA = findViewById(R.id.edtRA);
         Nome = findViewById(R.id.edtNome);
         //DECLARAÇÃO DO SPINNER
-        Spinner combo = (Spinner)findViewById(R.id.spinCurso);
+       Cursos = findViewById(R.id.spinCurso);
 //--------------------------------------------------------
         //RECUPERANDO O ARRAY DE STRINGS DO STRINGS.XML
         String[] cursos = getResources().getStringArray(R.array.cursos);
@@ -34,7 +39,7 @@ public class Cadastro extends AppCompatActivity {
         ArrayAdapter<String> adp = new ArrayAdapter<>
               ( this, android.R.layout.simple_spinner_item,cursos);
         //INTEGRAR AS STRIGS AO MEU OBJETO DA ACTIVITY SPINNER
-        combo.setAdapter(adp);
+        Cursos.setAdapter(adp);
 
         }
 
@@ -49,11 +54,27 @@ public class Cadastro extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.cadSalvar){
-            Toast.makeText(this,"Salvando...", Toast.LENGTH_LONG).show();
-            finish();
-            }
+            SalvarAluno();
+           }
         if (id == R.id.cadCancel){
-            finish(); }
+            finish();
+        }
         return super.onOptionsItemSelected(item);
     }
+
+         public void SalvarAluno(){
+         a = new Aluno();
+         a.setRA(RA.getText().toString());
+         a.setNome(Nome.getText().toString());
+         a.setCursos(Cursos.getSelectedItem().toString());
+
+         Toast.makeText(this,"Salvando..."+ a , Toast.LENGTH_LONG).show();
+        //objeto so pode ser transportado setando na clase aluno um implements serializable
+        //DEVE-SE CRIAR UMA RESPOSTA
+
+            Intent i = new Intent();
+             i.putExtra("aluno" ,a);
+             setResult(1,i);
+             finish();
+         }
 }

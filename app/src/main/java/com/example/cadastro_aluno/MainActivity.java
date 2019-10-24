@@ -1,6 +1,7 @@
 package com.example.cadastro_aluno;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +15,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 //DECLARAÇÃO DOS OBJETOS NA ACTIVITY
+
 ListView ListaAluno;
+List<Aluno> Alunos;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,15 +28,28 @@ ListView ListaAluno;
         //ESTÂNCIANDO OS OBJETOS
         ListaAluno = findViewById(R.id.lstAluno);
         //CRIANDO UMA LISTA COM ARRAY
-        List<Object> objetos = new ArrayList<>();
+        Alunos = new ArrayList<>();
         //CRIO UM ADAPTER PARA INTEGAR MEU OBJETO DA ACTIVITY COM MEU ARRAY
-        ArrayAdapter<Object> adp = new ArrayAdapter<>
-                (this, android.R.layout.simple_gallery_item, objetos);
+        ArrayAdapter<Aluno> adp = new ArrayAdapter<>(this,
+                android.R.layout.simple_gallery_item, Alunos);
         //DAR UM SET NO MEU OBJETO DA ACTIVITY
         ListaAluno.setAdapter(adp);
 //---------------------------------------------------------------------------------
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Aluno a = (Aluno)data.getSerializableExtra("aluno");
+        Alunos.add(a);
+        carregarLista();
+
+    }
+    private void carregarLista(){
+     ArrayAdapter<Aluno> adp = new ArrayAdapter<>
+                    (this, android.R.layout.simple_gallery_item, Alunos);
+     ListaAluno.setAdapter(adp);}
 
 //MENU ACOPLADO A MINHA ACTIVITY
 //O MENU É TRATADO SEPARADO EM UMA OUTRA XML
@@ -50,10 +67,13 @@ ListView ListaAluno;
         //PARA CADA ITEM CRIAR UMA CONDIÇÃO
         //PODE SER USADO TAMBÉM UM SWITCH CASE
         int id = item.getItemId();
-
         if (id == R.id.nvaluno) {
-         Intent intencao = new Intent(this, Cadastro.class);
-        startActivity(intencao);}
+         Intent i = new Intent(this, Cadastro.class);
+         //startActivity(intencao);
+       //PARA RECEBER OS DADOS DA OUTRA TELA DEVE-SE CRIAR UMA INTENÇÃO DE RESULTADO
+        startActivityForResult(i,1);
+
+        }
         if (id == R.id.FechaApp){
             finish();
         }
